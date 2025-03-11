@@ -30,10 +30,29 @@ class MainActivity : AppCompatActivity() {
             insets
         }
         auth = Firebase.auth
+
+        val currentUser = auth.currentUser
+
+        if(currentUser != null){
+            val intent = Intent(this,FeedActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
     }
 
     fun signInClicked(view : View) {
+        val email = binding.emailText.text.toString()
+        val password = binding.passwordText.text.toString()
 
+        if(email.isNotEmpty() && password.isNotEmpty()){
+            auth.signInWithEmailAndPassword(email,password).addOnSuccessListener {
+                val intent = Intent(this,FeedActivity::class.java)
+                startActivity(intent)
+                finish()
+            }.addOnFailureListener {
+                Toast.makeText(this, "Enter email and password", Toast.LENGTH_LONG).show()
+            }
+        }
     }
 
     fun signUpClicked(view : View){
